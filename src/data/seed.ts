@@ -24,6 +24,8 @@ function emptyCharacter(id: 'arai' | 'linara', name: string, x: number, y: numbe
     ownedActions: [...FREE_ACTIONS],
     homeFurniture: [],
     position: { x, y },
+    resting: false,
+    lastSeenAt: null,
   }
 }
 
@@ -39,8 +41,11 @@ export function buildEmptyState(): AppState {
     messages: [],
     worldEvents: [],
     notifications: [],
+    focusSessions: [],
+    chests: [],
     currentPlayer: null,
     lastLevelUp: null,
     lastReward: null,
+    welcomeBack: null,
   }
 }

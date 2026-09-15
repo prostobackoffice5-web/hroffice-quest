@@ -126,6 +126,31 @@ export interface GameNotification {
   createdAt: string
 }
 
+export interface ActiveFocus {
+  taskId: string
+  startedAt: string
+  plannedMinutes: number
+}
+
+export interface FocusSession {
+  id: string
+  taskId: string
+  player: PlayerId
+  startedAt: string
+  endedAt: string
+  minutes: number
+  plannedMinutes: number
+}
+
+export interface Chest {
+  id: string
+  player: PlayerId
+  source: string
+  opened: boolean
+  reward?: { coins: number; sparks: number }
+  createdAt: string
+}
+
 export interface Character {
   id: PlayerId
   name: string
@@ -140,6 +165,16 @@ export interface Character {
   equippedAccessory?: string
   homeFurniture: string[]
   position: { x: number; y: number }
+  activeFocus?: ActiveFocus
+  resting: boolean
+  lastSeenAt: string | null
+  lastChestDate?: string
+}
+
+export interface WelcomeBackDigest {
+  player: PlayerId
+  since: string
+  lines: string[]
 }
 
 export interface AppState {
@@ -150,7 +185,10 @@ export interface AppState {
   messages: Message[]
   worldEvents: WorldEvent[]
   notifications: GameNotification[]
+  focusSessions: FocusSession[]
+  chests: Chest[]
   currentPlayer: PlayerId | null
   lastLevelUp: { player: PlayerId; level: number } | null
   lastReward: { xp: number; coins: number; sparks: number; key: string } | null
+  welcomeBack: WelcomeBackDigest | null
 }

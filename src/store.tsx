@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useReducer } from 'react'
 import type { ReactNode } from 'react'
-import type { AppState, Category, Message, PlayerId, Project, ShopItem, Task } from './types'
+import type { AppState, Category, Chest, FocusSession, Message, PlayerId, Project, ShopItem, Task } from './types'
 import { buildEmptyState } from './data/seed'
 import { levelFromXp } from './data/engine'
 import { SHOP_ITEMS, eventItemsFor } from './data/shopItems'
@@ -34,6 +34,12 @@ type Action =
   | { type: 'SEND_MESSAGE'; from: PlayerId; to: PlayerId; text: string; taskId?: string }
   | { type: 'MARK_MESSAGES_READ'; player: PlayerId }
   | { type: 'DISMISS_NOTIFICATION'; id: string }
+  | { type: 'START_FOCUS'; player: PlayerId; taskId: string; minutes: number }
+  | { type: 'PAUSE_FOCUS'; player: PlayerId }
+  | { type: 'STOP_FOCUS'; player: PlayerId }
+  | { type: 'TOGGLE_RESTING'; player: PlayerId }
+  | { type: 'OPEN_CHEST'; chestId: string }
+  | { type: 'CLEAR_WELCOME_BACK' }
   | { type: 'CLEAR_LEVEL_UP' }
   | { type: 'CLEAR_REWARD' }
 
@@ -54,6 +60,45 @@ function notify(state: AppState, player: PlayerId, icon: string, text: string): 
 function allShopItems(state: AppState): ShopItem[] {
   const eventItems = state.projects.flatMap((p) => eventItemsFor(p.id, p.title))
   return [...SHOP_ITEMS, ...eventItems]
+}
+
+function todayKey(d = new Date()): string {
+  return d.toISOString().slice(0, 10)
+}
+
+function finalizeFocus(state: AppState, player: PlayerId): AppState {
+  const character = state.characters[player]
+  const active = character.activeFocus
+  if (!active) return state
+  const minutes = Math.max(1, Math.round((Date.now() - new Date(active.startedAt).getTime()) / 60000))
+  const session: FocusSession = {
+    id: uid('focus'),
+    taskId: active.taskId,
+    player,
+    startedAt: active.startedAt,
+    endedAt: new Date().toISOString(),
+    minutes,
+    plannedMinutes: active.plannedMinutes,
+  }
+  return {
+    ...state,
+    focusSessions: [...state.focusSessions, session],
+    characters: { ...state.characters, [player]: { ...character, activeFocus: undefined } },
+  }
+}
+
+function grantDailyChest(state: AppState, player: PlayerId): AppState {
+  const character = state.characters[player]
+  const today = todayKey()
+  if (character.lastChestDate === today) return state
+  const chest: Chest = { id: uid('chest'), player, source: 'Сундук дня', opened: false, createdAt: new Date().toISOString() }
+  let next: AppState = {
+    ...state,
+    chests: [chest, ...state.chests],
+    characters: { ...state.characters, [player]: { ...character, lastChestDate: today } },
+  }
+  next = notify(next, player, '🎁', 'Сундук дня появился в мире!')
+  return next
 }
 
 function checkProjectCompletion(state: AppState, projectId: string): AppState {
@@ -84,8 +129,29 @@ function checkProjectCompletion(state: AppState, projectId: string): AppState {
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
-    case 'SELECT_PLAYER':
-      return { ...state, currentPlayer: action.player }
+    case 'SELECT_PLAYER': {
+      const character = state.characters[action.player]
+      const since = character.lastSeenAt
+      let welcomeBack = null
+      if (since) {
+        const sinceMs = new Date(since).getTime()
+        const lines: string[] = []
+        const otherId: PlayerId = action.player === 'arai' ? 'linara' : 'arai'
+        const otherDone = state.tasks.filter((t) => t.completedAt && new Date(t.completedAt).getTime() > sinceMs && (t.assignee === otherId || t.assignee === 'both')).length
+        if (otherDone > 0) lines.push(`${state.characters[otherId].name} завершила ${otherDone} ${otherDone === 1 ? 'задание' : 'задания'}`)
+        const completedProjects = state.projects.filter((p) => p.completed && new Date(p.createdAt).getTime() <= Date.now() && new Date(p.endDate).getTime() > sinceMs).length
+        if (completedProjects > 0) lines.push(`Завершён ${completedProjects} проект-ивент`)
+        const unopenedChests = state.chests.filter((c) => c.player === action.player && !c.opened).length
+        if (unopenedChests > 0) lines.push(`Тебя ждёт ${unopenedChests} нераскрытый сундук`)
+        if (lines.length > 0) welcomeBack = { player: action.player, since, lines }
+      }
+      return {
+        ...state,
+        currentPlayer: action.player,
+        welcomeBack,
+        characters: { ...state.characters, [action.player]: { ...character, lastSeenAt: new Date().toISOString() } },
+      }
+    }
     case 'LOGOUT':
       return { ...state, currentPlayer: null }
     case 'FINISH_CREATION':
@@ -148,6 +214,10 @@ function reducer(state: AppState, action: Action): AppState {
       const recipients: PlayerId[] = task.assignee === 'both' ? ['arai', 'linara'] : [task.assignee]
       let next: AppState = { ...state, tasks: state.tasks.map((t) => (t.id === action.id ? { ...t, status: 'done', progress: 100, completedAt: new Date().toISOString() } : t)) }
 
+      if (next.characters[action.player].activeFocus?.taskId === task.id) {
+        next = finalizeFocus(next, action.player)
+      }
+
       for (const recipient of recipients) {
         const character = next.characters[recipient]
         const newXp = character.xp + xpGain
@@ -159,6 +229,7 @@ function reducer(state: AppState, action: Action): AppState {
           lastLevelUp: newLevel > oldLevel ? { player: recipient, level: newLevel } : next.lastLevelUp,
         }
         next = notify(next, recipient, '🎉', `Задание завершено: ${task.title}`)
+        next = grantDailyChest(next, recipient)
       }
       next = { ...next, lastReward: { xp: xpGain, coins: coinsGain, sparks: sparksGain, key: `${action.player}-${Date.now()}` } }
 
@@ -257,6 +328,40 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, messages: state.messages.map((m) => (m.to === action.player ? { ...m, read: true } : m)) }
     case 'DISMISS_NOTIFICATION':
       return { ...state, notifications: state.notifications.filter((n) => n.id !== action.id) }
+    case 'START_FOCUS': {
+      let next = finalizeFocus(state, action.player)
+      const character = next.characters[action.player]
+      next = {
+        ...next,
+        characters: {
+          ...next.characters,
+          [action.player]: { ...character, resting: false, activeFocus: { taskId: action.taskId, startedAt: new Date().toISOString(), plannedMinutes: action.minutes } },
+        },
+        tasks: next.tasks.map((t) => (t.id === action.taskId && t.status === 'new' ? { ...t, status: 'in_progress' } : t)),
+      }
+      return next
+    }
+    case 'PAUSE_FOCUS':
+    case 'STOP_FOCUS':
+      return finalizeFocus(state, action.player)
+    case 'TOGGLE_RESTING': {
+      const character = state.characters[action.player]
+      return { ...state, characters: { ...state.characters, [action.player]: { ...character, resting: !character.resting } } }
+    }
+    case 'OPEN_CHEST': {
+      const chest = state.chests.find((c) => c.id === action.chestId)
+      if (!chest || chest.opened) return state
+      const coins = 20 + Math.floor(Math.random() * 40)
+      const sparks = Math.random() < 0.25 ? 5 : 0
+      const character = state.characters[chest.player]
+      return {
+        ...state,
+        chests: state.chests.map((c) => (c.id === action.chestId ? { ...c, opened: true, reward: { coins, sparks } } : c)),
+        characters: { ...state.characters, [chest.player]: { ...character, coins: character.coins + coins, sparks: character.sparks + sparks } },
+      }
+    }
+    case 'CLEAR_WELCOME_BACK':
+      return { ...state, welcomeBack: null }
     case 'CLEAR_LEVEL_UP':
       return { ...state, lastLevelUp: null }
     case 'CLEAR_REWARD':

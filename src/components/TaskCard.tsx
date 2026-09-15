@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useStore } from '../store'
 import { PRIORITY_LABELS, DIFFICULTY_LABELS } from '../data/categories'
+import { FocusControls } from './FocusControls'
 import type { PlayerId, Task } from '../types'
 
 const PLAYER_LABEL: Record<string, string> = { arai: 'Арай', linara: 'Линара', both: 'Вместе' }
@@ -74,6 +75,7 @@ export function TaskCard({ task, onDelete }: { task: Task; onDelete?: () => void
       </div>
 
       <UrgentTimer task={task} />
+      {!done && <FocusControls task={task} />}
 
       {task.assignee === 'both' ? (
         <div className="space-y-1">

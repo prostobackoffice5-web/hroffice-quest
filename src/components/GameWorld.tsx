@@ -16,9 +16,18 @@ import { MailModal } from './MailModal'
 import { ActionWheel } from './ActionWheel'
 import { WorldEventFx } from './WorldEventFx'
 import { NotificationStack } from './NotificationStack'
-import type { PlayerId } from '../types'
+import { WelcomeBackModal } from './WelcomeBackModal'
+import { DailyChestButton } from './DailyChestButton'
+import { Garden } from './Garden'
+import type { Character, PlayerId } from '../types'
 
 type ModalKind = 'board' | 'actions' | 'chest' | 'shop' | 'home' | 'bookshelf' | 'mail' | 'settings' | 'appearance' | null
+
+function presenceDot(character: Character) {
+  if (character.activeFocus) return '#facc15'
+  if (character.resting) return '#38bdf8'
+  return '#4ade80'
+}
 
 export function GameWorld() {
   const { state, dispatch } = useStore()
@@ -72,12 +81,16 @@ export function GameWorld() {
       <div className="pixel-window w-full" style={{ maxWidth: GRID_COLS * TILE }}>
         <div className="pixel-window-title">
           <span>{character.name}</span>
-          <button onClick={() => setModal('settings')} className="pixel-btn-x" title="Настройки">⚙</button>
+          <div className="flex items-center gap-2">
+            <DailyChestButton />
+            <button onClick={() => setModal('settings')} className="pixel-btn-x" title="Настройки">⚙</button>
+          </div>
         </div>
         <div className="p-3">
           <XpBar xp={character.xp} coins={character.coins} sparks={character.sparks} />
         </div>
       </div>
+      <WelcomeBackModal />
 
       <div className="relative" style={{ width: GRID_COLS * TILE, height: GRID_ROWS * TILE, maxWidth: '100%', overflow: 'hidden', border: '4px solid #1f150d' }}>
         <div className="absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${GRID_COLS}, ${TILE}px)`, gridTemplateRows: `repeat(${GRID_ROWS}, ${TILE}px)` }}>
@@ -97,12 +110,16 @@ export function GameWorld() {
           </div>
         ))}
 
+        <Garden player="arai" x={2} y={6} />
+        <Garden player="linara" x={4} y={6} />
+
         <div
           className="absolute transition-all duration-150 flex items-center justify-center"
           style={{ left: other.position.x * TILE, top: other.position.y * TILE, width: TILE, height: TILE, cursor: nearOther ? 'pointer' : 'default' }}
           onClick={() => nearOther && setWheelTarget(other.id)}
         >
           <CharacterSprite appearance={other.appearance} size={34} />
+          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#1f150d]" style={{ background: presenceDot(other) }} />
         </div>
 
         <div
@@ -110,6 +127,7 @@ export function GameWorld() {
           style={{ left: character.position.x * TILE, top: character.position.y * TILE, width: TILE, height: TILE }}
         >
           <CharacterSprite appearance={character.appearance} size={36} />
+          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#1f150d]" style={{ background: presenceDot(character) }} />
         </div>
 
         <WorldEventFx />
