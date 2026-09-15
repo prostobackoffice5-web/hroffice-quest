@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --font-pixel: 'Courier New', ui-monospace, monospace;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #1b1230;
+}
+
+.pixel-border {
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.08), 0 8px 24px rgba(0,0,0,0.35);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+}
