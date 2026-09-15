@@ -30,7 +30,7 @@ export function LevelUpOverlay() {
             transition={{ type: 'spring', stiffness: 220, damping: 14 }}
           >
             <div className="text-2xl font-black text-[#facc15]">Новый уровень!</div>
-            <div className="text-[#f3e9d2] mt-1">
+            <div className="text-[#eef3f6] mt-1">
               {state.characters[info.player].name} достигла уровня {info.level}
             </div>
           </motion.div>

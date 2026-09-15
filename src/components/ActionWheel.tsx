@@ -21,7 +21,7 @@ export function ActionWheel({ target, onClose }: { target: PlayerId; onClose: ()
         onClick={onClose}
       >
         <div className="relative" style={{ width: radius * 2 + 60, height: radius * 2 + 60 }}>
-          <div className="absolute inset-0 flex items-center justify-center text-[#f3e9d2] font-bold text-sm pixel-window px-3 py-1.5" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 120 }}>
+          <div className="absolute inset-0 flex items-center justify-center text-[#eef3f6] font-bold text-sm pixel-window px-3 py-1.5" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 120 }}>
             {targetName}
           </div>
           {available.map((a, i) => {
@@ -40,7 +40,7 @@ export function ActionWheel({ target, onClose }: { target: PlayerId; onClose: ()
                   dispatch({ type: 'PERFORM_ACTION', from: me, to: target, actionId: a.id })
                   onClose()
                 }}
-                className="absolute pixel-btn bg-[#4a3826] text-[#f3e9d2] flex flex-col items-center justify-center"
+                className="absolute pixel-btn bg-[#243544] text-[#eef3f6] flex flex-col items-center justify-center"
                 style={{ left: '50%', top: '50%', width: 64, height: 64, marginLeft: -32, marginTop: -32 }}
                 title={a.label}
               >

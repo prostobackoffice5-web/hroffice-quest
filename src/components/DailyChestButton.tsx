@@ -12,7 +12,7 @@ export function DailyChestButton() {
 
   return (
     <>
-      <button onClick={() => setOpenId(pending[0].id)} className="pixel-btn bg-[#facc15] text-[#1f150d] text-xs font-bold px-3 py-1.5 animate-pulse">
+      <button onClick={() => setOpenId(pending[0].id)} className="pixel-btn bg-[#facc15] text-[#12181f] text-xs font-bold px-3 py-1.5 animate-pulse">
         🎁 Сундук дня
       </button>
       <AnimatePresence>
@@ -22,15 +22,15 @@ export function DailyChestButton() {
               {!active.opened ? (
                 <>
                   <motion.div className="text-6xl mb-4" animate={{ rotate: [0, -8, 8, -8, 0] }} transition={{ repeat: Infinity, duration: 1.2 }}>🎁</motion.div>
-                  <div className="text-[#f3e9d2] font-bold mb-4">Сундук дня</div>
-                  <button onClick={() => dispatch({ type: 'OPEN_CHEST', chestId: active.id })} className="pixel-btn bg-[#3f7d3a] text-white px-4 py-2">Открыть</button>
+                  <div className="text-[#eef3f6] font-bold mb-4">Сундук дня</div>
+                  <button onClick={() => dispatch({ type: 'OPEN_CHEST', chestId: active.id })} className="pixel-btn bg-[#2fae7a] text-white px-4 py-2">Открыть</button>
                 </>
               ) : (
                 <>
                   <div className="text-5xl mb-3">✨</div>
-                  <div className="text-[#f3e9d2] font-bold mb-2">Награда получена!</div>
+                  <div className="text-[#eef3f6] font-bold mb-2">Награда получена!</div>
                   <div className="text-[#facc15] text-sm mb-1">+{active.reward?.coins} монет{active.reward?.sparks ? ` · +${active.reward.sparks} искр` : ''}</div>
-                  <button onClick={() => setOpenId(null)} className="mt-4 pixel-btn bg-[#4a3826] text-[#f3e9d2] px-4 py-2 text-sm">Закрыть</button>
+                  <button onClick={() => setOpenId(null)} className="mt-4 pixel-btn bg-[#243544] text-[#eef3f6] px-4 py-2 text-sm">Закрыть</button>
                 </>
               )}
             </motion.div>

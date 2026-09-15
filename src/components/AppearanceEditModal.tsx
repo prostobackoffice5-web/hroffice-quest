@@ -12,7 +12,7 @@ function Swatch({ color, active, onClick }: { color: string; active: boolean; on
     <button
       onClick={onClick}
       className="w-8 h-8 border-2"
-      style={{ background: color, borderColor: active ? '#f3e9d2' : '#1f150d' }}
+      style={{ background: color, borderColor: active ? '#eef3f6' : '#12181f' }}
     />
   )
 }
@@ -31,7 +31,7 @@ export function AppearanceEditModal({ onClose }: { onClose: () => void }) {
           <CharacterSprite appearance={a} size={64} />
         </div>
         <div>
-          <label className="text-xs text-[#d8c9a8] block mb-1.5">Цвет кожи</label>
+          <label className="text-xs text-[#9fb2bf] block mb-1.5">Цвет кожи</label>
           <div className="flex gap-2">
             {SKIN_TONES.map((c) => (
               <Swatch key={c} color={c} active={a.skinColor === c} onClick={() => setAppearance({ skinColor: c })} />
@@ -39,7 +39,7 @@ export function AppearanceEditModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <div>
-          <label className="text-xs text-[#d8c9a8] block mb-1.5">Волосы</label>
+          <label className="text-xs text-[#9fb2bf] block mb-1.5">Волосы</label>
           <div className="flex gap-2">
             {HAIR_COLORS.map((c) => (
               <Swatch key={c} color={c} active={a.hairColor === c} onClick={() => setAppearance({ hairColor: c })} />
@@ -47,7 +47,7 @@ export function AppearanceEditModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <div>
-          <label className="text-xs text-[#d8c9a8] block mb-1.5">Одежда</label>
+          <label className="text-xs text-[#9fb2bf] block mb-1.5">Одежда</label>
           <div className="flex gap-2 flex-wrap">
             {OUTFIT_COLORS.map((c) => (
               <Swatch key={c} color={c} active={a.outfitColor === c} onClick={() => setAppearance({ outfitColor: c })} />
@@ -55,7 +55,7 @@ export function AppearanceEditModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <div>
-          <label className="text-xs text-[#d8c9a8] block mb-1.5">Обувь</label>
+          <label className="text-xs text-[#9fb2bf] block mb-1.5">Обувь</label>
           <div className="flex gap-2">
             {SHOES_COLORS.map((c) => (
               <Swatch key={c} color={c} active={a.shoesColor === c} onClick={() => setAppearance({ shoesColor: c })} />

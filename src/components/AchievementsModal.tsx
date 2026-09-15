@@ -31,8 +31,8 @@ export function AchievementsModal({ onClose }: { onClose: () => void }) {
           const unlocked = done >= a.target
           return (
             <div key={a.id} className={`pixel-panel p-3 flex items-center justify-between ${unlocked ? '' : 'opacity-50'}`}>
-              <span className="text-[#f3e9d2]">{a.title}</span>
-              <span className="text-xs text-[#d8c9a8]">{unlocked ? 'Открыто' : `${done}/${a.target}`}</span>
+              <span className="text-[#eef3f6]">{a.title}</span>
+              <span className="text-xs text-[#9fb2bf]">{unlocked ? 'Открыто' : `${done}/${a.target}`}</span>
             </div>
           )
         })}
@@ -44,8 +44,8 @@ export function AchievementsModal({ onClose }: { onClose: () => void }) {
           const unlocked = a.check(focusStats)
           return (
             <div key={a.id} className={`pixel-panel p-3 flex items-center justify-between ${unlocked ? '' : 'opacity-50'}`}>
-              <span className="text-[#f3e9d2]">{a.title}</span>
-              <span className="text-xs text-[#d8c9a8]">{unlocked ? 'Открыто' : '🔒'}</span>
+              <span className="text-[#eef3f6]">{a.title}</span>
+              <span className="text-xs text-[#9fb2bf]">{unlocked ? 'Открыто' : '🔒'}</span>
             </div>
           )
         })}

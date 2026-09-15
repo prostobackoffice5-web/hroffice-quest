@@ -8,7 +8,7 @@ export function LoginScreen() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-8 p-6" style={{ background: 'radial-gradient(circle at center, #1d3b1f 0%, #0e1a10 70%)' }}>
-      <h1 className="text-3xl font-black text-[#f3e9d2] tracking-wide">Кто сегодня играет?</h1>
+      <h1 className="text-3xl font-black text-[#eef3f6] tracking-wide">Кто сегодня играет?</h1>
       <div className="flex flex-wrap gap-6 justify-center">
         {order.map((id) => {
           const character = state.characters[id]

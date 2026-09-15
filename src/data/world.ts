@@ -1,6 +1,6 @@
 export const GRID_COLS = 13
 export const GRID_ROWS = 9
-export const TILE = 52
+export const TILE = 64
 
 export type ObjectKind = 'board' | 'computer' | 'chest' | 'shop' | 'bed' | 'bookshelf' | 'mail' | 'tree' | 'water'
 

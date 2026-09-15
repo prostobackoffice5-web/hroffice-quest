@@ -3,8 +3,11 @@ import { ModalShell } from './ModalShell'
 import { useStore, allShopItems } from '../store'
 import { CharacterSprite } from './CharacterSprite'
 import { XpBar } from './XpBar'
+import { ItemIcon } from './ItemIcon'
 import { formatMinutes } from '../data/focus'
 import type { PlayerId } from '../types'
+
+const ROOM_SLOTS = 10
 
 export function HomeModal({ target, onClose, onEditAppearance }: { target: PlayerId; onClose: () => void; onEditAppearance: () => void }) {
   const { state, dispatch } = useStore()
@@ -43,36 +46,36 @@ export function HomeModal({ target, onClose, onEditAppearance }: { target: Playe
     <ModalShell title={`Дом · ${character.name}`} onClose={onClose} wide>
       <div className="flex flex-col items-center gap-3">
         <CharacterSprite appearance={character.appearance} size={64} />
-        <div className="text-sm text-[#f3e9d2]">{status}</div>
+        <div className="text-sm text-[#eef3f6]">{status}</div>
         {isMine && (
           <div className="w-full">
             <XpBar xp={character.xp} coins={character.coins} sparks={character.sparks} />
           </div>
         )}
         {isMine && (
-          <button onClick={() => dispatch({ type: 'TOGGLE_RESTING', player: me })} className="pixel-btn w-full py-1.5 bg-[#4a3826] text-[#f3e9d2] text-xs">
+          <button onClick={() => dispatch({ type: 'TOGGLE_RESTING', player: me })} className="pixel-btn w-full py-1.5 bg-[#243544] text-[#eef3f6] text-xs">
             {character.resting ? 'Я снова свободна' : 'Я отдыхаю'}
           </button>
         )}
 
         <div className="grid grid-cols-2 gap-2 w-full text-center">
           <div className="pixel-panel p-2">
-            <div className="text-lg font-bold text-[#f3e9d2]">{done}</div>
-            <div className="text-xs text-[#d8c9a8]">Выполнено</div>
+            <div className="text-lg font-bold text-[#eef3f6]">{done}</div>
+            <div className="text-xs text-[#9fb2bf]">Выполнено</div>
           </div>
           <div className="pixel-panel p-2">
-            <div className="text-lg font-bold text-[#f3e9d2]">{active}</div>
-            <div className="text-xs text-[#d8c9a8]">Активно</div>
+            <div className="text-lg font-bold text-[#eef3f6]">{active}</div>
+            <div className="text-xs text-[#9fb2bf]">Активно</div>
           </div>
         </div>
 
         <div className="w-full pixel-panel p-3">
           <div className="text-sm text-[#facc15] font-semibold mb-1.5">Сегодня</div>
-          <div className="grid grid-cols-2 gap-1.5 text-xs text-[#d8c9a8]">
-            <div>Время фокуса: <span className="text-[#f3e9d2]">{formatMinutes(todayStats.totalMinutes)}</span></div>
-            <div>Сессий: <span className="text-[#f3e9d2]">{todayStats.sessions}</span></div>
-            <div>Задач выполнено: <span className="text-[#f3e9d2]">{todayStats.doneToday}</span></div>
-            <div>Среднее время: <span className="text-[#f3e9d2]">{formatMinutes(todayStats.avg)}</span></div>
+          <div className="grid grid-cols-2 gap-1.5 text-xs text-[#9fb2bf]">
+            <div>Время фокуса: <span className="text-[#eef3f6]">{formatMinutes(todayStats.totalMinutes)}</span></div>
+            <div>Сессий: <span className="text-[#eef3f6]">{todayStats.sessions}</span></div>
+            <div>Задач выполнено: <span className="text-[#eef3f6]">{todayStats.doneToday}</span></div>
+            <div>Среднее время: <span className="text-[#eef3f6]">{formatMinutes(todayStats.avg)}</span></div>
           </div>
         </div>
 
@@ -82,9 +85,9 @@ export function HomeModal({ target, onClose, onEditAppearance }: { target: Playe
             <div className="space-y-1.5">
               {byCategory.map(({ cat, minutes }) => (
                 <div key={cat?.id} className="flex items-center gap-2 text-xs">
-                  <span className="w-28 text-[#d8c9a8] truncate">{cat?.name}</span>
+                  <span className="w-28 text-[#9fb2bf] truncate">{cat?.name}</span>
                   <div className="flex-1 h-2 pixel-slot overflow-hidden"><div className="h-full" style={{ width: `${Math.min(100, (minutes / byCategory[0].minutes) * 100)}%`, background: cat?.color }} /></div>
-                  <span className="text-[#f3e9d2] w-16 text-right">{formatMinutes(minutes)}</span>
+                  <span className="text-[#eef3f6] w-16 text-right">{formatMinutes(minutes)}</span>
                 </div>
               ))}
             </div>
@@ -92,19 +95,24 @@ export function HomeModal({ target, onClose, onEditAppearance }: { target: Playe
         )}
 
         <div className="w-full">
-          <div className="text-sm text-[#d8c9a8] mb-1.5">Убранство дома</div>
-          <div className="grid grid-cols-5 gap-1.5">
-            {furniture.map((f) => (
-              <div key={f!.id} className="pixel-slot aspect-square flex items-center justify-center" title={f!.name}>
-                <div className="w-6 h-6" style={{ background: f!.color, border: '2px solid #1f150d' }} />
-              </div>
-            ))}
-            {furniture.length === 0 && <div className="col-span-5 text-xs text-[#d8c9a8]">Пусто — купи мебель в Лавке</div>}
+          <div className="text-sm text-[#9fb2bf] mb-1.5">Комната — расставлено {furniture.length} из {character.homeFurniture.length} купленных</div>
+          <div className="pixel-panel p-3">
+            <div className="grid grid-cols-5 gap-2">
+              {Array.from({ length: ROOM_SLOTS }).map((_, idx) => {
+                const f = furniture[idx]
+                return (
+                  <div key={idx} className="pixel-slot aspect-square flex items-center justify-center" title={f?.name}>
+                    {f ? <ItemIcon name={f.name} color={f.color} size={36} /> : <span className="text-[10px] text-[#3a4a58]">пусто</span>}
+                  </div>
+                )
+              })}
+            </div>
+            {furniture.length === 0 && <div className="text-xs text-[#9fb2bf] mt-2">Комната пока пустая — купи мебель в Лавке, и она появится здесь</div>}
           </div>
         </div>
 
         {isMine && (
-          <button onClick={onEditAppearance} className="pixel-btn w-full py-2 bg-[#4a3826] text-[#f3e9d2] text-sm">Изменить внешность</button>
+          <button onClick={onEditAppearance} className="pixel-btn w-full py-2 bg-[#243544] text-[#eef3f6] text-sm">Изменить внешность</button>
         )}
       </div>
     </ModalShell>

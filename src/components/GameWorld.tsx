@@ -5,6 +5,7 @@ import { GrassTile, WorldObjectView } from './WorldTile'
 import { CharacterSprite } from './CharacterSprite'
 import { XpBar } from './XpBar'
 import { BoardModal } from './BoardModal'
+import { BoardDock } from './BoardDock'
 import { ActionsModal } from './ActionsModal'
 import { InventoryModal } from './InventoryModal'
 import { ShopModal } from './ShopModal'
@@ -76,94 +77,103 @@ export function GameWorld() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-3 p-3" style={{ background: '#0e1a10' }}>
+    <div className="min-h-screen flex flex-col lg:flex-row gap-4 p-4" style={{ background: '#0b1117' }}>
       <NotificationStack />
-      <div className="pixel-window w-full" style={{ maxWidth: GRID_COLS * TILE }}>
-        <div className="pixel-window-title">
-          <span>{character.name}</span>
-          <div className="flex items-center gap-2">
-            <DailyChestButton />
-            <button onClick={() => setModal('settings')} className="pixel-btn-x" title="Настройки">⚙</button>
-          </div>
-        </div>
-        <div className="p-3">
-          <XpBar xp={character.xp} coins={character.coins} sparks={character.sparks} />
-        </div>
-      </div>
       <WelcomeBackModal />
 
-      <div className="relative" style={{ width: GRID_COLS * TILE, height: GRID_ROWS * TILE, maxWidth: '100%', overflow: 'hidden', border: '4px solid #1f150d' }}>
-        <div className="absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${GRID_COLS}, ${TILE}px)`, gridTemplateRows: `repeat(${GRID_ROWS}, ${TILE}px)` }}>
-          {Array.from({ length: GRID_COLS * GRID_ROWS }).map((_, i) => (
-            <GrassTile key={i} />
-          ))}
+      <div className="flex-1 flex flex-col items-center gap-3 min-w-0">
+        <div className="pixel-window w-full" style={{ maxWidth: GRID_COLS * TILE }}>
+          <div className="pixel-window-title">
+            <span>{character.name}</span>
+            <div className="flex items-center gap-2">
+              <DailyChestButton />
+              <button onClick={() => setModal('settings')} className="pixel-btn-x" title="Настройки">⚙</button>
+            </div>
+          </div>
+          <div className="p-3">
+            <XpBar xp={character.xp} coins={character.coins} sparks={character.sparks} />
+          </div>
         </div>
 
-        {WORLD_OBJECTS.map((o) => (
-          <div
-            key={o.id}
-            onClick={() => nearby?.id === o.id && interact()}
-            className="absolute flex items-center justify-center"
-            style={{ left: o.x * TILE, top: o.y * TILE, width: TILE, height: TILE, cursor: o.interactive ? 'pointer' : 'default' }}
+        <div className="relative w-full" style={{ maxWidth: GRID_COLS * TILE }}>
+          <div className="relative mx-auto" style={{ width: GRID_COLS * TILE, height: GRID_ROWS * TILE, maxWidth: '100%', overflow: 'hidden', border: '4px solid #12181f' }}>
+            <div className="absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${GRID_COLS}, ${TILE}px)`, gridTemplateRows: `repeat(${GRID_ROWS}, ${TILE}px)` }}>
+              {Array.from({ length: GRID_COLS * GRID_ROWS }).map((_, i) => (
+                <GrassTile key={i} />
+              ))}
+            </div>
+
+            {WORLD_OBJECTS.map((o) => (
+              <div
+                key={o.id}
+                onClick={() => nearby?.id === o.id && interact()}
+                className="absolute flex items-center justify-center"
+                style={{ left: o.x * TILE, top: o.y * TILE, width: TILE, height: TILE, cursor: o.interactive ? 'pointer' : 'default' }}
+              >
+                <WorldObjectView kind={o.kind} label={o.label} />
+              </div>
+            ))}
+
+            <Garden player="arai" x={2} y={6} />
+            <Garden player="linara" x={4} y={6} />
+
+            <div
+              className="absolute transition-all duration-150 flex items-center justify-center"
+              style={{ left: other.position.x * TILE, top: other.position.y * TILE, width: TILE, height: TILE, cursor: nearOther ? 'pointer' : 'default' }}
+              onClick={() => nearOther && setWheelTarget(other.id)}
+            >
+              <CharacterSprite appearance={other.appearance} size={42} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#12181f]" style={{ background: presenceDot(other) }} />
+            </div>
+
+            <div
+              className="absolute transition-all duration-150 flex items-center justify-center"
+              style={{ left: character.position.x * TILE, top: character.position.y * TILE, width: TILE, height: TILE }}
+            >
+              <CharacterSprite appearance={character.appearance} size={44} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#12181f]" style={{ background: presenceDot(character) }} />
+            </div>
+
+            <WorldEventFx />
+
+            {nearOther && !modal && (
+              <div className="absolute pixel-window px-3 py-1.5 text-xs" style={{ left: other.position.x * TILE, top: other.position.y * TILE - 34 }}>
+                {other.name} · Нажмите [E]
+              </div>
+            )}
+            {nearby && !modal && !nearOther && (
+              <div className="absolute pixel-window px-3 py-1.5 text-xs" style={{ left: nearby.x * TILE, top: nearby.y * TILE - 34 }}>
+                {nearby.label} · Нажмите [E]
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-6 select-none">
+          <div className="grid grid-cols-3 gap-1 w-32">
+            <div />
+            <button className="pixel-btn bg-[#243544] text-[#eef3f6] py-2" onClick={() => move(0, -1)}>▲</button>
+            <div />
+            <button className="pixel-btn bg-[#243544] text-[#eef3f6] py-2" onClick={() => move(-1, 0)}>◀</button>
+            <div />
+            <button className="pixel-btn bg-[#243544] text-[#eef3f6] py-2" onClick={() => move(1, 0)}>▶</button>
+            <div />
+            <button className="pixel-btn bg-[#243544] text-[#eef3f6] py-2" onClick={() => move(0, 1)}>▼</button>
+            <div />
+          </div>
+          <button
+            disabled={!nearby && !nearOther}
+            onClick={() => (nearOther ? setWheelTarget(other.id) : interact())}
+            className="pixel-btn bg-[#2fae7a] disabled:opacity-30 disabled:cursor-not-allowed text-white px-5 py-3 text-sm font-bold"
           >
-            <WorldObjectView kind={o.kind} label={o.label} />
-          </div>
-        ))}
-
-        <Garden player="arai" x={2} y={6} />
-        <Garden player="linara" x={4} y={6} />
-
-        <div
-          className="absolute transition-all duration-150 flex items-center justify-center"
-          style={{ left: other.position.x * TILE, top: other.position.y * TILE, width: TILE, height: TILE, cursor: nearOther ? 'pointer' : 'default' }}
-          onClick={() => nearOther && setWheelTarget(other.id)}
-        >
-          <CharacterSprite appearance={other.appearance} size={34} />
-          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#1f150d]" style={{ background: presenceDot(other) }} />
+            Взаимодействовать
+          </button>
         </div>
-
-        <div
-          className="absolute transition-all duration-150 flex items-center justify-center"
-          style={{ left: character.position.x * TILE, top: character.position.y * TILE, width: TILE, height: TILE }}
-        >
-          <CharacterSprite appearance={character.appearance} size={36} />
-          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#1f150d]" style={{ background: presenceDot(character) }} />
-        </div>
-
-        <WorldEventFx />
-
-        {nearOther && !modal && (
-          <div className="absolute pixel-window px-3 py-1.5 text-xs" style={{ left: other.position.x * TILE, top: other.position.y * TILE - 34 }}>
-            {other.name} · Нажмите [E]
-          </div>
-        )}
-        {nearby && !modal && !nearOther && (
-          <div className="absolute pixel-window px-3 py-1.5 text-xs" style={{ left: nearby.x * TILE, top: nearby.y * TILE - 34 }}>
-            {nearby.label} · Нажмите [E]
-          </div>
-        )}
       </div>
 
-      <div className="flex items-center gap-6 select-none">
-        <div className="grid grid-cols-3 gap-1 w-32">
-          <div />
-          <button className="pixel-btn bg-[#4a3826] text-[#f3e9d2] py-2" onClick={() => move(0, -1)}>▲</button>
-          <div />
-          <button className="pixel-btn bg-[#4a3826] text-[#f3e9d2] py-2" onClick={() => move(-1, 0)}>◀</button>
-          <div />
-          <button className="pixel-btn bg-[#4a3826] text-[#f3e9d2] py-2" onClick={() => move(1, 0)}>▶</button>
-          <div />
-          <button className="pixel-btn bg-[#4a3826] text-[#f3e9d2] py-2" onClick={() => move(0, 1)}>▼</button>
-          <div />
-        </div>
-        <button
-          disabled={!nearby && !nearOther}
-          onClick={() => (nearOther ? setWheelTarget(other.id) : interact())}
-          className="pixel-btn bg-[#3f7d3a] disabled:opacity-30 disabled:cursor-not-allowed text-white px-5 py-3 text-sm font-bold"
-        >
-          Взаимодействовать
-        </button>
-      </div>
+      <aside className="w-full lg:w-[400px] shrink-0">
+        <BoardDock onOpenFull={() => setModal('board')} />
+      </aside>
 
       {modal === 'board' && <BoardModal onClose={() => setModal(null)} />}
       {modal === 'actions' && <ActionsModal onClose={() => setModal(null)} />}

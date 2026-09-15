@@ -12,7 +12,7 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
             dispatch({ type: 'LOGOUT' })
             onClose()
           }}
-          className="pixel-btn w-full py-2.5 bg-[#4a3826] text-[#f3e9d2]"
+          className="pixel-btn w-full py-2.5 bg-[#243544] text-[#eef3f6]"
         >
           Сменить игрока
         </button>

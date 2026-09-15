@@ -12,7 +12,7 @@ export function ActionsModal({ onClose }: { onClose: () => void }) {
 
   return (
     <ModalShell title="Действия" onClose={onClose} wide>
-      <div className="text-sm text-[#d8c9a8] mb-3">Получено: {character.ownedActions.length} / {ACTION_DEFS.length}</div>
+      <div className="text-sm text-[#9fb2bf] mb-3">Получено: {character.ownedActions.length} / {ACTION_DEFS.length}</div>
       <div className="grid gap-2 sm:grid-cols-2">
         {purchasable.map((a) => {
           const owned = character.ownedActions.includes(a.id)
@@ -21,20 +21,20 @@ export function ActionsModal({ onClose }: { onClose: () => void }) {
             <div key={a.id} className="pixel-panel p-3 flex items-center gap-3">
               <div className="text-2xl">{a.icon}</div>
               <div className="flex-1">
-                <div className="text-[#f3e9d2] font-semibold">{a.label}</div>
-                <div className="text-xs text-[#d8c9a8]">{RARITY_LABEL[a.rarity]} · {a.effect}</div>
+                <div className="text-[#eef3f6] font-semibold">{a.label}</div>
+                <div className="text-xs text-[#9fb2bf]">{RARITY_LABEL[a.rarity]} · {a.effect}</div>
               </div>
               {owned ? (
                 <span className="text-xs text-[#4ade80]">Получено</span>
               ) : a.currency === 'free' ? (
-                <span className="text-xs text-[#d8c9a8]">Бесплатно</span>
+                <span className="text-xs text-[#9fb2bf]">Бесплатно</span>
               ) : a.rarity === 'event' ? (
                 <span className="text-xs text-[#a78bfa]">Награда за ивент</span>
               ) : (
                 <button
                   disabled={!canBuy}
                   onClick={() => dispatch({ type: 'BUY_ACTION', player, actionId: a.id })}
-                  className="pixel-btn bg-[#3f7d3a] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs px-3 py-1.5"
+                  className="pixel-btn bg-[#2fae7a] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs px-3 py-1.5"
                 >
                   {a.currency === 'coins' ? `${a.priceCoins} монет` : `${a.priceSparks} искр`}
                 </button>

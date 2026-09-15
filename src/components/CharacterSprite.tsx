@@ -16,22 +16,22 @@ export function CharacterSprite({ appearance, size = 40, animate = true }: { app
       transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
     >
       {appearance.accessory === 'cape' && (
-        <div style={{ position: 'absolute', top: 8 * scale, left: -4 * scale, width: 10 * scale, height: 26 * scale, background: ACCESSORY_COLORS.cape, border: '2px solid #1f150d' }} />
+        <div style={{ position: 'absolute', top: 8 * scale, left: -4 * scale, width: 10 * scale, height: 26 * scale, background: ACCESSORY_COLORS.cape, border: '2px solid #12181f' }} />
       )}
       {/* legs */}
-      <div style={{ position: 'absolute', bottom: 0, left: 6 * scale, width: 10 * scale, height: 12 * scale, background: appearance.shoesColor, border: '2px solid #1f150d' }} />
-      <div style={{ position: 'absolute', bottom: 0, right: 6 * scale, width: 10 * scale, height: 12 * scale, background: appearance.shoesColor, border: '2px solid #1f150d' }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 6 * scale, width: 10 * scale, height: 12 * scale, background: appearance.shoesColor, border: '2px solid #12181f' }} />
+      <div style={{ position: 'absolute', bottom: 0, right: 6 * scale, width: 10 * scale, height: 12 * scale, background: appearance.shoesColor, border: '2px solid #12181f' }} />
       {/* body */}
-      <div style={{ position: 'absolute', top: 14 * scale, left: 4 * scale, width: 32 * scale, height: 18 * scale, background: appearance.outfitColor, border: '2px solid #1f150d' }} />
+      <div style={{ position: 'absolute', top: 14 * scale, left: 4 * scale, width: 32 * scale, height: 18 * scale, background: appearance.outfitColor, border: '2px solid #12181f' }} />
       {/* head */}
-      <div style={{ position: 'absolute', top: 0, left: 8 * scale, width: 24 * scale, height: 18 * scale, background: appearance.skinColor, border: '2px solid #1f150d' }} />
+      <div style={{ position: 'absolute', top: 0, left: 8 * scale, width: 24 * scale, height: 18 * scale, background: appearance.skinColor, border: '2px solid #12181f' }} />
       {/* hair */}
-      <div style={{ position: 'absolute', top: -2 * scale, left: 6 * scale, width: 28 * scale, height: 8 * scale, background: appearance.hairColor, border: '2px solid #1f150d' }} />
+      <div style={{ position: 'absolute', top: -2 * scale, left: 6 * scale, width: 28 * scale, height: 8 * scale, background: appearance.hairColor, border: '2px solid #12181f' }} />
       {appearance.accessory === 'glasses' && (
         <div style={{ position: 'absolute', top: 8 * scale, left: 10 * scale, width: 20 * scale, height: 4 * scale, background: ACCESSORY_COLORS.glasses, opacity: 0.85 }} />
       )}
       {appearance.accessory === 'hat' && (
-        <div style={{ position: 'absolute', top: -8 * scale, left: 6 * scale, width: 28 * scale, height: 8 * scale, background: ACCESSORY_COLORS.hat, border: '2px solid #1f150d' }} />
+        <div style={{ position: 'absolute', top: -8 * scale, left: 6 * scale, width: 28 * scale, height: 8 * scale, background: ACCESSORY_COLORS.hat, border: '2px solid #12181f' }} />
       )}
     </motion.div>
   )

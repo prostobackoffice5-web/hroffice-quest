@@ -19,7 +19,7 @@ function Swatch({ color, active, onClick }: { color: string; active: boolean; on
     <button
       onClick={onClick}
       className="w-8 h-8 border-2"
-      style={{ background: color, borderColor: active ? '#f3e9d2' : '#1f150d' }}
+      style={{ background: color, borderColor: active ? '#eef3f6' : '#12181f' }}
     />
   )
 }
@@ -42,16 +42,16 @@ export function CharacterCreatorScreen({ player }: { player: PlayerId }) {
           </div>
 
           <div>
-            <label className="text-xs text-[#d8c9a8] block mb-1">Имя</label>
+            <label className="text-xs text-[#9fb2bf] block mb-1">Имя</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full pixel-slot px-3 py-2 text-[#f3e9d2] outline-none"
+              className="w-full pixel-slot px-3 py-2 text-[#eef3f6] outline-none"
             />
           </div>
 
           <div>
-            <label className="text-xs text-[#d8c9a8] block mb-1.5">Цвет кожи</label>
+            <label className="text-xs text-[#9fb2bf] block mb-1.5">Цвет кожи</label>
             <div className="flex gap-2">
               {SKIN_TONES.map((c) => (
                 <Swatch key={c} color={c} active={a.skinColor === c} onClick={() => setAppearance({ skinColor: c })} />
@@ -60,7 +60,7 @@ export function CharacterCreatorScreen({ player }: { player: PlayerId }) {
           </div>
 
           <div>
-            <label className="text-xs text-[#d8c9a8] block mb-1.5">Волосы</label>
+            <label className="text-xs text-[#9fb2bf] block mb-1.5">Волосы</label>
             <div className="flex gap-2">
               {HAIR_COLORS.map((c) => (
                 <Swatch key={c} color={c} active={a.hairColor === c} onClick={() => setAppearance({ hairColor: c })} />
@@ -69,7 +69,7 @@ export function CharacterCreatorScreen({ player }: { player: PlayerId }) {
           </div>
 
           <div>
-            <label className="text-xs text-[#d8c9a8] block mb-1.5">Одежда</label>
+            <label className="text-xs text-[#9fb2bf] block mb-1.5">Одежда</label>
             <div className="flex gap-2 flex-wrap">
               {OUTFIT_COLORS.map((c) => (
                 <Swatch key={c} color={c} active={a.outfitColor === c} onClick={() => setAppearance({ outfitColor: c })} />
@@ -78,7 +78,7 @@ export function CharacterCreatorScreen({ player }: { player: PlayerId }) {
           </div>
 
           <div>
-            <label className="text-xs text-[#d8c9a8] block mb-1.5">Обувь</label>
+            <label className="text-xs text-[#9fb2bf] block mb-1.5">Обувь</label>
             <div className="flex gap-2">
               {SHOES_COLORS.map((c) => (
                 <Swatch key={c} color={c} active={a.shoesColor === c} onClick={() => setAppearance({ shoesColor: c })} />
@@ -87,13 +87,13 @@ export function CharacterCreatorScreen({ player }: { player: PlayerId }) {
           </div>
 
           <div>
-            <label className="text-xs text-[#d8c9a8] block mb-1.5">Аксессуар</label>
+            <label className="text-xs text-[#9fb2bf] block mb-1.5">Аксессуар</label>
             <div className="flex gap-2 flex-wrap">
               {ACCESSORIES.map((acc) => (
                 <button
                   key={acc.id}
                   onClick={() => setAppearance({ accessory: acc.id })}
-                  className={`pixel-btn px-3 py-1.5 text-sm ${a.accessory === acc.id ? 'bg-[#6b4f32] text-[#fff6e0]' : 'bg-[#4a3826] text-[#d8c9a8]'}`}
+                  className={`pixel-btn px-3 py-1.5 text-sm ${a.accessory === acc.id ? 'bg-[#31485a] text-[#fff6e0]' : 'bg-[#243544] text-[#9fb2bf]'}`}
                 >
                   {acc.label}
                 </button>
@@ -103,7 +103,7 @@ export function CharacterCreatorScreen({ player }: { player: PlayerId }) {
 
           <button
             onClick={() => dispatch({ type: 'FINISH_CREATION', player, name: name.trim() || character.name })}
-            className="pixel-btn w-full py-2.5 bg-[#3f7d3a] text-white"
+            className="pixel-btn w-full py-2.5 bg-[#2fae7a] text-white"
           >
             Готово
           </button>

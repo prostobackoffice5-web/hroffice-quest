@@ -58,13 +58,13 @@ export function TaskCard({ task, onDelete }: { task: Task; onDelete?: () => void
   return (
     <div className="pixel-panel p-3 flex flex-col gap-1.5" style={{ borderLeft: `4px solid ${category?.color ?? '#8b9dc3'}` }}>
       <div className="flex items-start justify-between gap-2">
-        <div className={`font-semibold text-[#f3e9d2] ${done ? 'line-through opacity-60' : ''}`}>{task.title}</div>
+        <div className={`font-semibold text-[#eef3f6] ${done ? 'line-through opacity-60' : ''}`}>{task.title}</div>
         <div className="text-xs text-[#facc15] whitespace-nowrap">
           +{task.xp} опыта · +{task.coins} монет{task.urgent ? ` · бонус +${task.bonusSparks ?? 0} искр` : ''}
         </div>
       </div>
-      {task.description && <div className="text-xs text-[#d8c9a8]">{task.description}</div>}
-      <div className="flex flex-wrap items-center gap-2 text-xs text-[#d8c9a8]">
+      {task.description && <div className="text-xs text-[#9fb2bf]">{task.description}</div>}
+      <div className="flex flex-wrap items-center gap-2 text-xs text-[#9fb2bf]">
         <span>{category?.name}</span>
         <span style={{ color: priority.color }}>● {priority.label}</span>
         <span>{DIFFICULTY_LABELS[task.difficulty]}</span>
@@ -79,12 +79,12 @@ export function TaskCard({ task, onDelete }: { task: Task; onDelete?: () => void
 
       {task.assignee === 'both' ? (
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-xs text-[#d8c9a8]">
+          <div className="flex items-center gap-2 text-xs text-[#9fb2bf]">
             <span className="w-14">Арай</span>
             <div className="flex-1 h-2 pixel-slot overflow-hidden"><div className="h-full bg-[#38bdf8]" style={{ width: `${task.jointProgress?.arai ?? 0}%` }} /></div>
             <span className="w-8 text-right">{task.jointProgress?.arai ?? 0}%</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[#d8c9a8]">
+          <div className="flex items-center gap-2 text-xs text-[#9fb2bf]">
             <span className="w-14">Линара</span>
             <div className="flex-1 h-2 pixel-slot overflow-hidden"><div className="h-full bg-[#f472b6]" style={{ width: `${task.jointProgress?.linara ?? 0}%` }} /></div>
             <span className="w-8 text-right">{task.jointProgress?.linara ?? 0}%</span>
@@ -92,7 +92,7 @@ export function TaskCard({ task, onDelete }: { task: Task; onDelete?: () => void
         </div>
       ) : (
         !done && (
-          <div className="flex items-center gap-2 text-xs text-[#d8c9a8]">
+          <div className="flex items-center gap-2 text-xs text-[#9fb2bf]">
             <div className="flex-1 h-2 pixel-slot overflow-hidden"><div className="h-full bg-[#4ade80]" style={{ width: `${task.progress}%` }} /></div>
             <span className="w-8 text-right">{task.progress}%</span>
           </div>
@@ -103,24 +103,24 @@ export function TaskCard({ task, onDelete }: { task: Task; onDelete?: () => void
         {!done && isMine && (task.assignee !== 'both' || !myJointDone) && (
           <div className="flex gap-1">
             {PROGRESS_STEPS.map((p) => (
-              <button key={p} onClick={() => setProgress(p)} className="pixel-btn bg-[#4a3826] text-[#f3e9d2] text-[10px] px-1.5 py-1">
+              <button key={p} onClick={() => setProgress(p)} className="pixel-btn bg-[#243544] text-[#eef3f6] text-[10px] px-1.5 py-1">
                 {p}%
               </button>
             ))}
           </div>
         )}
         {!done && isMine && (task.assignee !== 'both' ? task.progress >= 100 : myJointDone) && (
-          <button onClick={complete} className="pixel-btn bg-[#3f7d3a] text-white text-xs px-3 py-1.5">Завершить</button>
+          <button onClick={complete} className="pixel-btn bg-[#2fae7a] text-white text-xs px-3 py-1.5">Завершить</button>
         )}
-        <button onClick={() => setComposing((c) => !c)} className="pixel-btn bg-[#4a3826] text-[#f3e9d2] text-xs px-3 py-1.5">💬 Написать</button>
+        <button onClick={() => setComposing((c) => !c)} className="pixel-btn bg-[#243544] text-[#eef3f6] text-xs px-3 py-1.5">💬 Написать</button>
         {onDelete && (
-          <button onClick={onDelete} className="pixel-btn bg-[#8b3a3a] text-white text-xs px-3 py-1.5">Удалить</button>
+          <button onClick={onDelete} className="pixel-btn bg-[#d1495b] text-white text-xs px-3 py-1.5">Удалить</button>
         )}
       </div>
 
       {composing && (
         <div className="flex gap-2 mt-1">
-          <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Сообщение" className="flex-1 pixel-slot px-2 py-1.5 text-xs text-[#f3e9d2] outline-none" />
+          <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Сообщение" className="flex-1 pixel-slot px-2 py-1.5 text-xs text-[#eef3f6] outline-none" />
           <button
             onClick={() => {
               if (!text.trim()) return
@@ -128,7 +128,7 @@ export function TaskCard({ task, onDelete }: { task: Task; onDelete?: () => void
               setText('')
               setComposing(false)
             }}
-            className="pixel-btn bg-[#3f7d3a] text-white text-xs px-3 py-1.5"
+            className="pixel-btn bg-[#2fae7a] text-white text-xs px-3 py-1.5"
           >
             Отправить
           </button>

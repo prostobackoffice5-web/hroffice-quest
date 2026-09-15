@@ -11,16 +11,16 @@ body {
 }
 
 .pixel-window {
-  background: #3a2b1e;
-  border: 4px solid #1f150d;
-  box-shadow: inset 0 0 0 3px #6b4f32, 0 10px 0 rgba(0,0,0,0.4);
+  background: #1a2530;
+  border: 4px solid #12181f;
+  box-shadow: inset 0 0 0 3px #31485a, 0 10px 0 rgba(0,0,0,0.4);
   border-radius: 2px;
-  color: #f3e9d2;
+  color: #eef3f6;
 }
 
 .pixel-window-title {
-  background: #6b4f32;
-  border-bottom: 3px solid #1f150d;
+  background: #31485a;
+  border-bottom: 3px solid #12181f;
   padding: 10px 14px;
   font-weight: 800;
   letter-spacing: 0.03em;
@@ -33,7 +33,7 @@ body {
 .pixel-btn-x {
   width: 26px;
   height: 26px;
-  background: #8b3a3a;
+  background: #d1495b;
   border: 2px solid #4a1a1a;
   color: white;
   font-weight: bold;
@@ -42,7 +42,7 @@ body {
 .pixel-btn-x:hover { background: #a94747; }
 
 .pixel-btn {
-  border: 3px solid #1f150d;
+  border: 3px solid #12181f;
   box-shadow: inset -2px -2px 0 rgba(0,0,0,0.25), inset 2px 2px 0 rgba(255,255,255,0.15);
   font-weight: 700;
   border-radius: 2px;
@@ -50,16 +50,16 @@ body {
 .pixel-btn:active { box-shadow: inset 2px 2px 0 rgba(0,0,0,0.25); }
 
 .pixel-slot {
-  background: #2b2016;
-  border: 3px solid #1f150d;
+  background: #141d26;
+  border: 3px solid #12181f;
   box-shadow: inset 2px 2px 0 rgba(0,0,0,0.4), inset -2px -2px 0 rgba(255,255,255,0.06);
 }
 
 .pixel-panel {
-  background: #4a3826;
-  border: 3px solid #1f150d;
+  background: #243544;
+  border: 3px solid #12181f;
   box-shadow: inset -2px -2px 0 rgba(0,0,0,0.2), inset 2px 2px 0 rgba(255,255,255,0.08);
 }
 
 ::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-thumb { background: #6b4f32; border: 2px solid #1f150d; }
+::-webkit-scrollbar-thumb { background: #31485a; border: 2px solid #12181f; }
