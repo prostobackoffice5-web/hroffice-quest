@@ -113,6 +113,15 @@ export function WorldObjectView({ kind, label }: { kind: ObjectKind; label: stri
           </Block>
         </div>
       )
+    case 'mail':
+      return (
+        <div className={common} title={label}>
+          <Block top="#d1a15c" side="#a8763a">
+            <div style={{ position: 'absolute', top: 8, left: 4, width: 24, height: 16, background: '#f3e9d2', border: '2px solid #1f150d' }} />
+            <div style={{ position: 'absolute', top: 8, left: 4, width: 0, height: 0, borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderTop: '10px solid #a8763a' }} />
+          </Block>
+        </div>
+      )
     default:
       return null
   }

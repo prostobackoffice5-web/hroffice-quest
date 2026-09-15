@@ -1,26 +1,32 @@
+import { Star } from 'lucide-react'
 import { ModalShell } from './ModalShell'
-import { useStore } from '../store'
-import { SHOP_ITEMS } from '../data/gamedata'
+import { useStore, allShopItems } from '../store'
+import { RARITY_COLORS, RARITY_LABELS } from '../data/shopItems'
 
 export function InventoryModal({ onClose }: { onClose: () => void }) {
   const { state, dispatch } = useStore()
   const player = state.currentPlayer!
   const character = state.characters[player]
-  const slots = Array.from({ length: 16 })
+  const items = allShopItems(state)
+  const slots = Array.from({ length: Math.max(20, character.inventory.length) })
 
   return (
     <ModalShell title="Инвентарь" onClose={onClose} wide>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
         {slots.map((_, idx) => {
           const entry = character.inventory[idx]
-          const item = entry ? SHOP_ITEMS.find((i) => i.id === entry.itemId) : null
+          const item = entry ? items.find((i) => i.id === entry.itemId) : null
           const equipped = item && (character.equippedOutfit === item.id || character.equippedAccessory === item.id)
           return (
-            <div key={idx} className="pixel-slot aspect-square flex flex-col items-center justify-center gap-1 p-1 relative">
+            <div key={idx} className="pixel-slot aspect-square flex flex-col items-center justify-center gap-1 p-1 relative" style={item ? { boxShadow: `inset 0 0 0 2px ${RARITY_COLORS[item.rarity]}` } : undefined}>
               {item ? (
                 <>
+                  <button onClick={() => dispatch({ type: 'TOGGLE_FAVORITE', player, itemId: item.id })} className="absolute top-1 right-1">
+                    <Star size={12} className={entry?.favorite ? 'fill-[#facc15] text-[#facc15]' : 'text-[#6b4f32]'} />
+                  </button>
                   <div className="w-6 h-6" style={{ background: item.color, border: '2px solid #1f150d' }} />
-                  <span className="text-[10px] text-[#d8c9a8] text-center leading-tight">{item.name}</span>
+                  <span className="text-[9px] text-[#d8c9a8] text-center leading-tight">{item.name}</span>
+                  <span className="text-[8px]" style={{ color: RARITY_COLORS[item.rarity] }}>{RARITY_LABELS[item.rarity]}</span>
                   {item.slot !== 'furniture' && (
                     <button
                       onClick={() =>
@@ -28,9 +34,17 @@ export function InventoryModal({ onClose }: { onClose: () => void }) {
                           ? dispatch({ type: 'UNEQUIP_SLOT', player, slot: item.slot as 'outfit' | 'accessory' })
                           : dispatch({ type: 'EQUIP_ITEM', player, itemId: item.id })
                       }
-                      className={`pixel-btn text-[10px] px-1.5 py-0.5 ${equipped ? 'bg-[#8b3a3a] text-white' : 'bg-[#3f7d3a] text-white'}`}
+                      className={`pixel-btn text-[9px] px-1.5 py-0.5 ${equipped ? 'bg-[#8b3a3a] text-white' : 'bg-[#3f7d3a] text-white'}`}
                     >
                       {equipped ? 'Снять' : 'Надеть'}
+                    </button>
+                  )}
+                  {item.slot === 'furniture' && (
+                    <button
+                      onClick={() => dispatch({ type: 'TOGGLE_FURNITURE', player, itemId: item.id })}
+                      className={`pixel-btn text-[9px] px-1.5 py-0.5 ${character.homeFurniture.includes(item.id) ? 'bg-[#8b3a3a] text-white' : 'bg-[#3f7d3a] text-white'}`}
+                    >
+                      {character.homeFurniture.includes(item.id) ? 'Убрать из дома' : 'Поставить в дом'}
                     </button>
                   )}
                 </>

@@ -5,7 +5,7 @@ import { ACHIEVEMENT_DEFS } from '../data/gamedata'
 export function AchievementsModal({ onClose }: { onClose: () => void }) {
   const { state } = useStore()
   const player = state.currentPlayer!
-  const done = state.tasks.filter((t) => t.assignee === player && t.status === 'done').length
+  const done = state.tasks.filter((t) => (t.assignee === player || t.assignee === 'both') && t.status === 'done').length
 
   return (
     <ModalShell title="Достижения" onClose={onClose}>

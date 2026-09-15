@@ -1,5 +1,8 @@
 import type { AppState, Character } from '../types'
 import { DEFAULT_CATEGORIES } from './categories'
+import { ACTION_DEFS } from './actions'
+
+const FREE_ACTIONS = ACTION_DEFS.filter((a) => a.currency === 'free').map((a) => a.id)
 
 function emptyCharacter(id: 'arai' | 'linara', name: string, x: number, y: number): Character {
   return {
@@ -15,8 +18,11 @@ function emptyCharacter(id: 'arai' | 'linara', name: string, x: number, y: numbe
     },
     xp: 0,
     coins: 0,
+    sparks: 0,
     createdCharacter: false,
     inventory: [],
+    ownedActions: [...FREE_ACTIONS],
+    homeFurniture: [],
     position: { x, y },
   }
 }
@@ -30,6 +36,9 @@ export function buildEmptyState(): AppState {
     categories: DEFAULT_CATEGORIES,
     tasks: [],
     projects: [],
+    messages: [],
+    worldEvents: [],
+    notifications: [],
     currentPlayer: null,
     lastLevelUp: null,
     lastReward: null,

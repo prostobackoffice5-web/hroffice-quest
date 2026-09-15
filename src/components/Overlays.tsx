@@ -60,7 +60,7 @@ export function RewardToast() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
         >
-          +{reward.xp} опыта · +{reward.coins} монет
+          +{reward.xp} опыта · +{reward.coins} монет{reward.sparks > 0 ? ` · +${reward.sparks} искр` : ''}
         </motion.div>
       )}
     </AnimatePresence>
