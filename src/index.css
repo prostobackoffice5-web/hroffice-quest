@@ -1,23 +1,65 @@
 @import "tailwindcss";
 
-@theme {
-  --font-pixel: 'Courier New', ui-monospace, monospace;
-}
-
 body {
   font-family: 'Segoe UI', system-ui, sans-serif;
-  background: #1b1230;
+  background: #0e1a10;
+  overscroll-behavior: none;
 }
 
-.pixel-border {
-  border-radius: 10px;
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.08), 0 8px 24px rgba(0,0,0,0.35);
+* {
+  image-rendering: pixelated;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
+.pixel-window {
+  background: #3a2b1e;
+  border: 4px solid #1f150d;
+  box-shadow: inset 0 0 0 3px #6b4f32, 0 10px 0 rgba(0,0,0,0.4);
+  border-radius: 2px;
+  color: #f3e9d2;
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
-  border-radius: 4px;
+
+.pixel-window-title {
+  background: #6b4f32;
+  border-bottom: 3px solid #1f150d;
+  padding: 10px 14px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff6e0;
 }
+
+.pixel-btn-x {
+  width: 26px;
+  height: 26px;
+  background: #8b3a3a;
+  border: 2px solid #4a1a1a;
+  color: white;
+  font-weight: bold;
+  line-height: 1;
+}
+.pixel-btn-x:hover { background: #a94747; }
+
+.pixel-btn {
+  border: 3px solid #1f150d;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.25), inset 2px 2px 0 rgba(255,255,255,0.15);
+  font-weight: 700;
+  border-radius: 2px;
+}
+.pixel-btn:active { box-shadow: inset 2px 2px 0 rgba(0,0,0,0.25); }
+
+.pixel-slot {
+  background: #2b2016;
+  border: 3px solid #1f150d;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.4), inset -2px -2px 0 rgba(255,255,255,0.06);
+}
+
+.pixel-panel {
+  background: #4a3826;
+  border: 3px solid #1f150d;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.2), inset 2px 2px 0 rgba(255,255,255,0.08);
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: #6b4f32; border: 2px solid #1f150d; }
